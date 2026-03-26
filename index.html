@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  body { background: #ebe7d3; font-family: system-ui; padding: 40px; max-width: 1200px; margin: 0 auto; }
+  h1 { font-size: 20px; margin-bottom: 6px; }
+  h2 { font-size: 16px; color: #1a1c20; margin: 0 0 8px; font-weight: 500; }
+  h3 { font-size: 14px; color: #1a1c20; margin: 30px 0 16px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+  .label { font-size: 11px; color: #888; margin-top: 4px; }
+  .frames { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; margin-bottom: 24px; }
+  .frame-box { background: rgba(255,255,255,0.3); border-radius: 10px; padding: 12px; }
+  .version { border: 1px solid rgba(26,28,32,0.08); border-radius: 16px; padding: 24px; margin-bottom: 30px; }
+  .version-label { font-size: 11px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+  .anim-wrap { background:rgba(255,255,255,0.3); border-radius:12px; padding:24px 16px; }
+  button { margin-top:10px; padding:7px 14px; border:1px solid #1a1c20; background:transparent; border-radius:6px; cursor:pointer; font-size:12px; }
+  button:hover { background: rgba(26,28,32,0.05); }
+  .old { opacity: 0.5; }
+</style>
+</head>
+<body>
+<h1>Lozenge wave animation - progress</h1>
+<p style="font-size:13px; color:#666; margin-bottom:30px;">Chronological order. Oldest at top, latest at bottom.</p>
+
+<!-- ============ V1 ============ -->
+<div class="version old">
+<div class="version-label">v1 - first attempt</div>
+<h2>Separate SVG arm + hand overlay</h2>
+<p style="font-size:12px; color:#666; margin-bottom:16px;">Arm = separate line drawn on top of pill border using stroke-dashoffset. Hand = separate path. Felt disconnected. Not organic.</p>
+<div class="anim-wrap">
+  <svg id="v1-svg" width="100%" height="140" viewBox="-5 -80 530 130" preserveAspectRatio="xMidYMid meet" style="overflow:visible; display:block; max-width:550px; margin:0 auto;">
+    <path d="M22,0 L478,0 A22,22 0 0 1 500,22 A22,22 0 0 1 478,44 L22,44 A22,22 0 0 1 0,22 A22,22 0 0 1 22,0 Z"
+          fill="rgba(235,231,211,0.7)" stroke="rgba(26,28,32,0.12)" stroke-width="1"/>
+    <path id="v1-arm" d="M494,6 C498,-10 510,-30 516,-50" fill="none" stroke="rgba(26,28,32,0.25)" stroke-width="1.5" stroke-linecap="round" opacity="0"/>
+    <g id="v1-hand-grp" opacity="0" style="transform-origin: 514px -50px">
+      <path id="v1-hand" d="M508,-50 L508,-56 Q509,-58.5 510,-56 L510.5,-59 Q511.5,-61.5 512.5,-59 L513,-62 Q514,-64.5 515,-62 L515.5,-59 Q516.5,-61.5 517.5,-59 L518,-56 Q519,-58.5 520,-56 L520,-50 Q519,-48 514,-47 Q509,-48 508,-50"
+            fill="none" stroke="rgba(26,28,32,0.3)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+  </svg>
+</div>
+<div class="label" id="v1-label">Click play.</div>
+<button onclick="runV1()">Play v1</button>
+</div>
+
+<!-- ============ V2 ============ -->
+<div class="version old">
+<div class="version-label">v2 - path morphing</div>
+<h2>First path-morph attempt</h2>
+<p style="font-size:12px; color:#666; margin-bottom:16px;">Border deforms as one continuous shape. Wobble too subtle, growth too smooth/uniform. Right direction but needed more character.</p>
+<div class="anim-wrap">
+  <svg width="100%" height="160" viewBox="-10 -110 560 180" preserveAspectRatio="xMidYMid meet" style="overflow:visible; display:block; max-width:550px; margin:0 auto;">
+    <path id="v2-anim" fill="rgba(235,231,211,0.7)" stroke="rgba(26,28,32,0.18)" stroke-width="1.2" stroke-linejoin="round"/>
+  </svg>
+</div>
+<div class="label" id="v2-label">Click play.</div>
+<button onclick="runV2()">Play v2</button>
+</div>
+
+<!-- ============ V3 ============ -->
+<div class="version old">
+<div class="version-label">v3 - T-1000 + travelling wave</div>
+<h2>Organic growth + wave wobble</h2>
+<p style="font-size:12px; color:#666; margin-bottom:16px;">Better wobble (travelling wave). T-1000 searching growth. But: corners lost structure, arm tip pointed, hand too rough, return shape imperfect.</p>
+<div class="anim-wrap">
+  <svg width="100%" height="160" viewBox="-10 -110 560 180" preserveAspectRatio="xMidYMid meet" style="overflow:visible; display:block; max-width:550px; margin:0 auto;">
+    <path id="v3-anim" fill="rgba(235,231,211,0.7)" stroke="rgba(26,28,32,0.18)" stroke-width="1.2" stroke-linejoin="round"/>
+  </svg>
+</div>
+<div class="label" id="v3-label">Click play.</div>
+<button onclick="runV3()">Play v3</button>
+</div>
+
+<!-- ============ V4 ============ -->
+<div class="version" style="border-color: rgba(26,28,32,0.2);">
+<div class="version-label">v4 - latest</div>
+<h2>Pixel-perfect pill + rounded arm + proper hand</h2>
+<p style="font-size:12px; color:#666; margin-bottom:16px;">Kappa-correct arcs for perfect pill. Rounded arm tip (no point). Proper hand with visible finger silhouette. Guaranteed return to exact starting shape.</p>
+
+<h3>Key frames</h3>
+<div class="frames" id="v4-frames"></div>
+
+<h3>Animated preview</h3>
+<div class="anim-wrap">
+  <svg width="100%" height="220" viewBox="-10 -140 560 230" preserveAspectRatio="xMidYMid meet" style="overflow:visible; display:block; max-width:700px; margin:0 auto;">
+    <path id="v4-anim" fill="rgba(235,231,211,0.7)" stroke="rgba(26,28,32,0.18)" stroke-width="1.2" stroke-linejoin="round"/>
+  </svg>
+</div>
+<div class="label" id="v4-label">Auto-plays on load.</div>
+<button onclick="runV4()">Play v4</button>
+</div>
+
+<script>
+// ==========================================
+// SHARED
+// ==========================================
+function makePath16(p) {
+  // M + 16 cubic beziers + Z
+  var d = "M" + p[0] + "," + p[1];
+  for (var i = 2; i < 98; i += 6) {
+    d += " C" + p[i] + "," + p[i+1] + " " + p[i+2] + "," + p[i+3] + " " + p[i+4] + "," + p[i+5];
+  }
+  return d + " Z";
+}
+function lerp(a, b, t) {
+  var r = new Array(a.length);
+  for (var i = 0; i < a.length; i++) r[i] = a[i] + (b[i] - a[i]) * t;
+  return r;
+}
+function easeInOut(t) { return t < 0.5 ? 2*t*t : 1 - Math.pow(-2*t+2,2)/2; }
+function easeOut(t) { return 1 - Math.pow(1-t,3); }
+function easeIn(t) { return t*t*t; }
+function tween16(el, from, to, dur, ease) {
+  return new Promise(function(res) {
+    var s = performance.now();
+    (function tick(now) {
+      var t = Math.min((now - s) / dur, 1);
+      el.setAttribute('d', makePath16(lerp(from, to, (ease||easeInOut)(t))));
+      t < 1 ? requestAnimationFrame(tick) : res();
+    })(s);
+  });
+}
+function wait(ms) { return new Promise(function(r) { setTimeout(r, ms); }); }
+function renderFrames16(id, list, data, vb) {
+  var el = document.getElementById(id);
+  list.forEach(function(f) {
+    var box = document.createElement('div');
+    box.className = 'frame-box';
+    box.innerHTML = '<h2 style="font-size:12px;margin:0 0 6px">' + f.title + '</h2>' +
+      '<svg width="100%" height="80" viewBox="' + (vb||'-10 -100 560 160') + '" preserveAspectRatio="xMidYMid meet" style="overflow:visible">' +
+      '<path d="' + makePath16(data[f.key]) + '" fill="rgba(235,231,211,0.7)" stroke="rgba(26,28,32,0.18)" stroke-width="1.2" stroke-linejoin="round"/>' +
+      '<path d="' + makePath16(data.rest) + '" fill="none" stroke="rgba(26,28,32,0.06)" stroke-width="1" stroke-dasharray="3,3"/>' +
+      '</svg>' +
+      '<div class="label">' + f.desc + '</div>';
+    el.appendChild(box);
+  });
+}
+
+// ==========================================
+// V4 DATA
+// ==========================================
+// 16 cubic bezier segments, 98 numbers total
+// Pill: W=500, H=44, R=22, kappa=0.5523
+// C1-C2: top edge | C3: top-right arc (kappa) | C4-C11: arm/hand reserve
+// C12: bottom-right arc (kappa) | C13-C14: bottom edge | C15: bottom-left arc | C16: top-left arc
+
+var V4 = {
+  rest: [
+    22, 0,                                      // M
+    100,0,    300,0,    378,0,                  // C1: top edge left
+    420,0,    460,0,    478,0,                  // C2: top edge right
+    490.15,0, 500,9.85, 500,22,                 // C3: top-right arc (kappa-correct)
+    500,22,   500,22,   500,22,                 // C4: reserve
+    500,22,   500,22,   500,22,                 // C5: reserve
+    500,22,   500,22,   500,22,                 // C6: reserve
+    500,22,   500,22,   500,22,                 // C7: reserve
+    500,22,   500,22,   500,22,                 // C8: reserve
+    500,22,   500,22,   500,22,                 // C9: reserve
+    500,22,   500,22,   500,22,                 // C10: reserve
+    500,22,   500,22,   500,22,                 // C11: reserve
+    500,34.15,490.15,44,478,44,                 // C12: bottom-right arc (kappa)
+    420,44,   300,44,   200,44,                 // C13: bottom edge right
+    120,44,   50,44,    22,44,                  // C14: bottom edge left
+    9.85,44,  0,34.15,  0,22,                   // C15: bottom-left arc (kappa)
+    0,9.85,   9.85,0,   22,0                    // C16: top-left arc (kappa)
+  ],
+
+  // Wobble: travelling wave along top edge
+  wave1: [
+    22, -2,
+    50,-10,   140,-8,   250,2,
+    350,3,    460,0,    478,0,
+    490.15,0, 500,9.85, 500,22,
+    500,22,   500,22,   500,22,
+    500,22,   500,22,   500,22,
+    500,22,   500,22,   500,22,
+    500,22,   500,22,   500,22,
+    500,22,   500,22,   500,22,
+    500,22,   500,22,   500,22,
+    500,22,   500,22,   500,22,
+    500,22,   500,22,   500,22,
+    500,34.15,490.15,44,478,44,
+    420,44,   300,46,   200,43,
+    120,45,   50,44,    22,44,
+    9.85,44,  0,34.15,  0,22,
+    0,9.85,   9.85,-1,  22,-2
+  ],
+  wave2: [
+    22, 1,
+    80,3,     180,2,    280,-8,
+    380,-6,   450,2,    478,0,
+    490.15,0, 500,9.85, 500,22,
+    500,22,   500,22,   500,22,
+    500,22,   500,22,   500,22,
+    500,22,   500,22,   500,22,
+    500,22,   500,22,   500,22,
+    500,22,   500,22,   500,22,
+    500,22,   500,22,   500,22,
+    500,22,   500,22,   500,22,
+    500,22,   500,22,   500,22,
+    500,34.15,490.15,44,478,44,
+    420,44,   300,44,   200,44,
+    120,44,   50,44,    22,44,
+    9.85,44,  0,34.15,  0,22,
+    0,9.85,   9.85,1,   22,1
+  ],
+  wave3: [
+    22, 0,
+    100,1,    250,2,    378,3,
+    430,-4,   468,-8,   480,-3,
+    492,-1,   500,9,    500,22,
+    500,22,   500,22,   500,22,
+    500,22,   500,22,   500,22,
+    500,22,   500,22,   500,22,
+    500,22,   500,22,   500,22,
+    500,22,   500,22,   500,22,
+    500,22,   500,22,   500,22,
+    500,22,   500,22,   500,22,
+    500,22,   500,22,   500,22,
+    500,34.15,490.15,44,478,44,
+    420,44,   300,44,   200,44,
+    120,44,   50,44,    22,44,
+    9.85,44,  0,34.15,  0,22,
+    0,9.85,   9.85,0,   22,0
+  ],
+  wave4: [
+    22, 0,
+    100,0,    300,0,    378,0,
+    420,0,    455,0,    476,0,
+    490,-2,   502,6,    502,18,
+    502,20,   501,21,   500,22,
+    500,22,   500,22,   500,22,
+    500,22,   500,22,   500,22,
+    500,22,   500,22,   500,22,
+    500,22,   500,22,   500,22,
+    500,22,   500,22,   500,22,
+    500,22,   500,22,   500,22,
+    500,22,   500,22,   500,22,
+    500,34.15,490.15,44,478,44,
+    420,44,   300,44,   200,44,
+    120,44,   50,44,    22,44,
+    9.85,44,  0,34.15,  0,22,
+    0,9.85,   9.85,0,   22,0
+  ],
+
+  // T-1000 bulge 1: goes RIGHT first (searching)
+  bulge1: [
+    22, 0,
+    100,0,    300,0,    378,0,
+    420,0,    450,0,    472,0,
+    488,0,    504,-4,   508,-2,
+    508,2,    506,8,    504,14,
+    502,16,   501,19,   500,22,
+    500,22,   500,22,   500,22,
+    500,22,   500,22,   500,22,
+    500,22,   500,22,   500,22,
+    500,22,   500,22,   500,22,
+    500,22,   500,22,   500,22,
+    500,22,   500,22,   500,22,
+    500,34.15,490.15,44,478,44,
+    420,44,   300,44,   200,44,
+    120,44,   50,44,    22,44,
+    9.85,44,  0,34.15,  0,22,
+    0,9.85,   9.85,0,   22,0
+  ],
+
+  // T-1000 bulge 2: recoils, tries UP-LEFT
+  bulge2: [
+    22, 0,
+    100,0,    300,0,    378,0,
+    420,0,    448,0,    468,0,
+    484,0,    494,-8,   492,-18,
+    494,-10,  498,0,    500,10,
+    500,14,   500,18,   500,22,
+    500,22,   500,22,   500,22,
+    500,22,   500,22,   500,22,
+    500,22,   500,22,   500,22,
+    500,22,   500,22,   500,22,
+    500,22,   500,22,   500,22,
+    500,22,   500,22,   500,22,
+    500,34.15,490.15,44,478,44,
+    420,44,   300,44,   200,44,
+    120,44,   50,44,    22,44,
+    9.85,44,  0,34.15,  0,22,
+    0,9.85,   9.85,0,   22,0
+  ],
+
+  // T-1000 bulge 3: commits upward, starts forming arm shape (with width)
+  bulge3: [
+    22, 0,
+    100,0,    300,0,    378,0,
+    420,0,    445,0,    462,0,
+    478,0,    492,-8,   496,-22,
+    494,-28,  492,-18,  498,-6,           // arm left side going up, return wiggles
+    502,-2,   504,6,    504,12,
+    503,14,   501,18,   500,22,
+    500,22,   500,22,   500,22,
+    500,22,   500,22,   500,22,
+    500,22,   500,22,   500,22,
+    500,22,   500,22,   500,22,
+    500,22,   500,22,   500,22,
+    500,34.15,490.15,44,478,44,
+    420,44,   300,44,   200,44,
+    120,44,   50,44,    22,44,
+    9.85,44,  0,34.15,  0,22,
+    0,9.85,   9.85,0,   22,0
+  ],
+
+  // Full arm stretch with ROUNDED tip (no point)
+  stretch: [
+    22, 0,
+    100,0,    300,0,    378,0,
+    420,0,    440,0,    456,0,
+    472,0,    486,-6,   492,-18,          // C3: arm root curves up
+    494,-26,  494,-34,  494,-42,          // C4: left side of arm going up
+    494,-48,  494,-52,  494,-56,          // C5: upper arm left side
+    494,-62,  496,-66,  500,-66,          // C6: rounded tip left→center
+    504,-66,  506,-62,  506,-56,          // C7: rounded tip center→right
+    506,-52,  506,-48,  506,-42,          // C8: upper arm right side
+    506,-34,  506,-26,  506,-18,          // C9: lower arm right side
+    504,-8,   502,4,    500,22,           // C10: arm base right → pill
+    500,22,   500,22,   500,22,           // C11: (collapsed, at junction)
+    500,34.15,490.15,44,478,44,
+    420,44,   300,44,   200,44,
+    120,44,   50,44,    22,44,
+    9.85,44,  0,34.15,  0,22,
+    0,9.85,   9.85,0,   22,0
+  ],
+
+  // Hand forms! Finger bumps emerge from the rounded tip.
+  // C6: wrist→thumb area  C7: index+middle fingers  C8: ring+pinky  C9: back of hand
+  hand: [
+    22, 0,
+    100,0,    300,0,    378,0,
+    420,0,    440,0,    456,0,
+    472,0,    486,-6,   492,-18,          // C3: arm root
+    494,-26,  494,-34,  494,-42,          // C4: left arm going up
+    494,-48,  494,-52,  492,-56,          // C5: wrist approach
+    488,-60,  484,-68,  486,-76,          // C6: thumb extends left-up, curves back
+    492,-82,  496,-90,  502,-88,          // C7: index→middle finger peaks
+    508,-86,  514,-80,  514,-72,          // C8: ring→pinky, curves right-down
+    512,-64,  510,-56,  508,-48,          // C9: back of hand descends
+    506,-34,  506,-22,  504,-10,          // C10: right arm descends
+    502,4,    500,14,   500,22,           // C11: arm base → pill
+    500,34.15,490.15,44,478,44,
+    420,44,   300,44,   200,44,
+    120,44,   50,44,    22,44,
+    9.85,44,  0,34.15,  0,22,
+    0,9.85,   9.85,0,   22,0
+  ],
+
+  // Wave left: hand tilts left
+  waveL: [
+    22, 0,
+    100,0,    300,0,    378,0,
+    420,0,    440,0,    456,0,
+    472,0,    486,-6,   492,-18,
+    494,-26,  494,-34,  492,-42,          // arm leans left
+    490,-48,  488,-52,  486,-56,
+    482,-60,  478,-68,  480,-76,          // thumb reaches further left
+    486,-82,  490,-90,  496,-88,
+    502,-86,  508,-80,  508,-72,          // fingers shifted left
+    506,-64,  506,-56,  506,-48,
+    506,-34,  506,-22,  504,-10,
+    502,4,    500,14,   500,22,
+    500,34.15,490.15,44,478,44,
+    420,44,   300,44,   200,44,
+    120,44,   50,44,    22,44,
+    9.85,44,  0,34.15,  0,22,
+    0,9.85,   9.85,0,   22,0
+  ],
+
+  // Wave right: hand tilts right
+  waveR: [
+    22, 0,
+    100,0,    300,0,    378,0,
+    420,0,    440,0,    456,0,
+    472,0,    486,-6,   492,-18,
+    494,-26,  496,-34,  498,-42,          // arm leans right
+    500,-48,  502,-52,  500,-56,
+    496,-60,  492,-68,  494,-76,          // thumb less extended
+    500,-82,  504,-90,  510,-88,
+    516,-86,  520,-80,  520,-72,          // fingers shifted right
+    518,-64,  514,-56,  510,-48,
+    506,-34,  506,-22,  504,-10,
+    502,4,    500,14,   500,22,
+    500,34.15,490.15,44,478,44,
+    420,44,   300,44,   200,44,
+    120,44,   50,44,    22,44,
+    9.85,44,  0,34.15,  0,22,
+    0,9.85,   9.85,0,   22,0
+  ]
+};
+
+// Verify all V4 arrays are length 98
+for (var k in V4) {
+  if (V4[k].length !== 98) console.error('V4.' + k, 'length:', V4[k].length, '(expected 98)');
+}
+
+// Render v4 frames
+renderFrames16('v4-frames', [
+  { key: 'rest',    title: 'Rest',       desc: 'Pixel-perfect pill with kappa arcs.' },
+  { key: 'wave1',   title: 'Wave 1',     desc: 'Travelling wave starts left.' },
+  { key: 'wave3',   title: 'Wave 3',     desc: 'Energy reaches corner.' },
+  { key: 'bulge1',  title: 'Bulge R',    desc: 'First bulge goes right (searching).' },
+  { key: 'bulge2',  title: 'Bulge up-L', desc: 'Recoils, tries up-left.' },
+  { key: 'bulge3',  title: 'Commits',    desc: 'Finds direction, arm starts.' },
+  { key: 'stretch', title: 'Arm',        desc: 'Full arm with ROUNDED tip.' },
+  { key: 'hand',    title: 'Hand',       desc: 'Finger bumps: thumb, index, middle, ring, pinky.' },
+  { key: 'waveL',   title: 'Wave L',     desc: 'Hand tilts left.' }
+], V4, '-10 -110 560 180');
+
+// V4 animation
+var v4Path = document.getElementById('v4-anim');
+v4Path.setAttribute('d', makePath16(V4.rest));
+
+async function runV4() {
+  var lbl = document.getElementById('v4-label');
+  // Always start from exact rest
+  v4Path.setAttribute('d', makePath16(V4.rest));
+  await wait(500);
+
+  // Travelling wave
+  lbl.textContent = 'Tension release...';
+  await tween16(v4Path, V4.rest, V4.wave1, 200);
+  await tween16(v4Path, V4.wave1, V4.wave2, 200);
+  await tween16(v4Path, V4.wave2, V4.wave3, 200);
+  await tween16(v4Path, V4.wave3, V4.wave4, 200);
+  await tween16(v4Path, V4.wave4, V4.wave1, 160);
+  await tween16(v4Path, V4.wave1, V4.wave3, 180);
+  await tween16(v4Path, V4.wave3, V4.rest, 220);
+  await wait(150);
+
+  // T-1000 growth
+  lbl.textContent = 'Searching...';
+  await tween16(v4Path, V4.rest, V4.wave4, 200, easeOut);
+  await tween16(v4Path, V4.wave4, V4.bulge1, 350, easeOut);
+  await wait(60);
+  await tween16(v4Path, V4.bulge1, V4.bulge2, 380);
+  await wait(50);
+  lbl.textContent = 'Growing...';
+  await tween16(v4Path, V4.bulge2, V4.bulge3, 420, easeOut);
+  await tween16(v4Path, V4.bulge3, V4.stretch, 500, easeOut);
+  await wait(100);
+
+  // Hand forms
+  lbl.textContent = 'Hand forming...';
+  await tween16(v4Path, V4.stretch, V4.hand, 500, easeOut);
+  await wait(120);
+
+  // Wave
+  lbl.textContent = 'Wave!';
+  await tween16(v4Path, V4.hand, V4.waveL, 200);
+  await tween16(v4Path, V4.waveL, V4.waveR, 280);
+  await tween16(v4Path, V4.waveR, V4.waveL, 280);
+  await tween16(v4Path, V4.waveL, V4.waveR, 240);
+  await tween16(v4Path, V4.waveR, V4.hand, 200);
+  await wait(200);
+
+  // Retract organically
+  lbl.textContent = 'Retracting...';
+  await tween16(v4Path, V4.hand, V4.stretch, 350, easeIn);
+  await tween16(v4Path, V4.stretch, V4.bulge3, 300);
+  await tween16(v4Path, V4.bulge3, V4.bulge1, 300);
+  await tween16(v4Path, V4.bulge1, V4.wave4, 250);
+  await tween16(v4Path, V4.wave4, V4.rest, 400);
+
+  // GUARANTEE: set exact rest shape
+  v4Path.setAttribute('d', makePath16(V4.rest));
+  lbl.textContent = 'Done. Shape is pixel-perfect rest state.';
+}
+
+// ==========================================
+// V3 DATA (preserved)
+// ==========================================
+var V3rest = [22,0,60,0,200,0,300,0,360,0,440,0,478,0,484,0,490,0,494,0,500,0,500,10,500,22,500,22,500,22,500,22,500,22,500,22,500,22,500,22,500,22,500,22,500,22,500,22,500,22,500,22,500,24,500,30,500,38,494,44,478,44,440,44,360,44,300,44,200,44,60,44,22,44,8,44,0,38,0,30,0,24,0,18,0,14,0,6,8,0,22,0];
+var V3wobble1 = [23,2,62,-1,202,1,298,-1,358,1,438,-1,477,1,484,0,491,1,495,1,502,0,502,11,501,22,501,22,501,22,501,22,501,22,501,22,501,22,501,22,501,22,501,22,501,22,501,22,501,22,501,22,501,25,501,31,502,39,494,46,479,43,439,45,358,43,300,45,200,43,60,46,21,43,7,45,-2,38,-1,30,-1,24,-1,18,-1,14,-2,5,7,-1,23,2];
+var V3hand = [22,0,60,0,200,0,300,0,360,0,420,0,455,0,468,0,482,-10,490,-28,496,-42,500,-54,502,-64,502,-72,498,-80,494,-84,496,-88,502,-90,506,-86,510,-82,512,-76,510,-70,508,-66,506,-62,505,-58,504,-48,504,-32,503,-16,502,0,501,22,500,30,500,38,494,44,478,44,440,44,360,44,300,44,200,44,60,44,22,44,8,44,0,38,0,30,0,24,0,18,0,14,0,6,8,0,22,0];
+function makePath15(p) {
+  var d = "M" + p[0] + "," + p[1];
+  for (var i = 2; i < p.length; i += 6) d += " C" + p.slice(i, i+6).join(",");
+  return d + " Z";
+}
+function tween15(el, from, to, dur, ease) {
+  return new Promise(function(res) {
+    var s = performance.now();
+    (function tick(now) {
+      var t = Math.min((now - s) / dur, 1);
+      var c = lerp(from, to, (ease||easeInOut)(t));
+      el.setAttribute('d', makePath15(c));
+      t < 1 ? requestAnimationFrame(tick) : res();
+    })(s);
+  });
+}
+var v3Path = document.getElementById('v3-anim');
+v3Path.setAttribute('d', makePath15(V3rest));
+async function runV3() {
+  var lbl = document.getElementById('v3-label');
+  v3Path.setAttribute('d', makePath15(V3rest));
+  await wait(400);
+  lbl.textContent = 'Wobble...';
+  await tween15(v3Path, V3rest, V3wobble1, 400);
+  await tween15(v3Path, V3wobble1, V3rest, 400);
+  await wait(200);
+  lbl.textContent = 'Growth...';
+  await tween15(v3Path, V3rest, V3hand, 1500, easeOut);
+  await wait(400);
+  lbl.textContent = 'Retract...';
+  await tween15(v3Path, V3hand, V3rest, 1000);
+  lbl.textContent = 'Done.';
+}
+
+// V2
+var V2rest = V3rest.slice();
+var V2hand = V3hand.slice();
+var v2Path = document.getElementById('v2-anim');
+v2Path.setAttribute('d', makePath15(V2rest));
+async function runV2() {
+  var lbl = document.getElementById('v2-label');
+  v2Path.setAttribute('d', makePath15(V2rest));
+  await wait(400);
+  lbl.textContent = 'Growth...';
+  await tween15(v2Path, V2rest, V2hand, 1500, easeOut);
+  await wait(400);
+  lbl.textContent = 'Retract...';
+  await tween15(v2Path, V2hand, V2rest, 1000);
+  lbl.textContent = 'Done.';
+}
+
+// V1
+async function runV1() {
+  var lbl = document.getElementById('v1-label');
+  var arm = document.getElementById('v1-arm');
+  var hg = document.getElementById('v1-hand-grp');
+  var h = document.getElementById('v1-hand');
+  arm.style.opacity='0'; hg.style.opacity='0';
+  var al=arm.getTotalLength(), hl=h.getTotalLength();
+  arm.style.strokeDasharray=al; arm.style.strokeDashoffset=al;
+  h.style.strokeDasharray=hl; h.style.strokeDashoffset=hl;
+  hg.style.transform='rotate(0deg)';
+  await wait(400);
+  lbl.textContent='Arm draws...';
+  arm.style.opacity='1'; arm.style.transition='stroke-dashoffset 0.6s ease-out'; arm.style.strokeDashoffset='0';
+  await wait(700);
+  lbl.textContent='Hand draws...';
+  hg.style.opacity='1'; h.style.transition='stroke-dashoffset 0.4s ease-out'; h.style.strokeDashoffset='0';
+  await wait(500);
+  lbl.textContent='Wave...';
+  await new Promise(function(r){hg.animate([{transform:'rotate(0deg)'},{transform:'rotate(-15deg)'},{transform:'rotate(12deg)'},{transform:'rotate(-10deg)'},{transform:'rotate(0deg)'}],{duration:800,easing:'ease-in-out'}).onfinish=r;});
+  await wait(300);
+  lbl.textContent='Retract...';
+  h.style.transition='stroke-dashoffset 0.3s ease-in'; h.style.strokeDashoffset=hl;
+  await wait(350); hg.style.opacity='0';
+  arm.style.transition='stroke-dashoffset 0.4s ease-in'; arm.style.strokeDashoffset=al;
+  await wait(450); arm.style.opacity='0';
+  lbl.textContent='Done. Separate line + hand.';
+}
+
+// Auto-play v4
+setTimeout(runV4, 600);
+</script>
+</body>
+</html>
